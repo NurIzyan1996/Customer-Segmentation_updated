@@ -22,7 +22,6 @@ MARRIED_PATH = os.path.join(os.getcwd(), 'saved_model','Married_label.pkl')
 GRADUATED_PATH = os.path.join(os.getcwd(), 'saved_model','Graduated_label.pkl')
 PROFE_PATH = os.path.join(os.getcwd(), 'saved_model','Profession_label.pkl')
 SPSCORE_PATH = os.path.join(os.getcwd(), 'saved_model','SpScore_label.pkl')
-SEGMENT_PATH = os.path.join(os.getcwd(), 'saved_model','Segment_label.pkl')
 KNN_PATH = os.path.join(os.getcwd(), 'saved_model','KNN_Imputer.pkl')
 MMS_PATH = os.path.join(os.getcwd(), 'saved_model','mms_scaler.pkl')
 OHE_PATH = os.path.join(os.getcwd(), 'saved_model','ohe_scaler.pkl')
@@ -72,31 +71,28 @@ eda.label_encoder(cat_data['Ever_Married'], MARRIED_PATH)
 eda.label_encoder(cat_data['Graduated'], GRADUATED_PATH)
 eda.label_encoder(cat_data['Profession'], PROFE_PATH)
 eda.label_encoder(cat_data['Spending_Score'], SPSCORE_PATH)
-target = eda.label_encoder(target, SEGMENT_PATH)
 
 # c) fill nan using KNNImputer
 features = pd.concat([cat_data, num_data], axis=1)
-new_df = pd.concat([features, target], axis=1)
-new_df = eda.knn_imputer(new_df, KNN_PATH)
+features = eda.knn_imputer(features, KNN_PATH)
 
 # d) checking Null values
-new_df.info()
+features.info()
 ''' Observation: there is no null value'''
 
 #%% STEP 4: Data Preprocessing
 
-X = new_df.iloc[:,0:6] # features
-y = new_df.iloc[:,6] # target
 # a) scale the features using Min Max Scaler approach
 dp = DataPreprocessing()
-X = dp.min_max_scaler(X, MMS_PATH)
+features = dp.min_max_scaler(features, MMS_PATH)
 
 # b) encode the target data using One Hot encoder approach
-y = dp.one_hot_encoder(y, OHE_PATH)
+target = dp.one_hot_encoder(target, OHE_PATH)
 
 #%%  STEP 5: DL Model
 # a) split train & test data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, 
+X_train, X_test, y_train, y_test = train_test_split(features, target, 
+                                                    test_size=0.3, 
                                                     random_state=42)
 X_train = np.expand_dims(X_train,-1)
 X_test = np.expand_dims(X_test,-1)

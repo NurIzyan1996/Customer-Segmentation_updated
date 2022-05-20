@@ -24,6 +24,7 @@ KNN_PATH = os.path.join(os.getcwd(), 'saved_model','KNN_Imputer.pkl')
 MMS_PATH = os.path.join(os.getcwd(), 'saved_model','mms_scaler.pkl')
 MODEL_PATH = os.path.join(os.getcwd(), 'saved_model', 'model.h5')
 SAVE_RESULT = os.path.join(os.getcwd(), 'datasets', 'new_customers_result.csv')
+OHE_PATH = os.path.join(os.getcwd(), 'saved_model','ohe_scaler.pkl')
 #%% STEP 1: Model Loading
 
 # model Loading
@@ -34,6 +35,7 @@ spscore_scaler = pickle.load(open(SPSCORE_PATH,'rb'))
 profe_scaler = pickle.load(open(PROFE_PATH,'rb'))
 graduated_scaler = pickle.load(open(GRADUATED_PATH,'rb'))
 married_scaler = pickle.load(open(MARRIED_PATH,'rb'))
+ohe_scaler = pickle.load(open(OHE_PATH,'rb'))
 
 model = load_model(MODEL_PATH)
 model.summary()
@@ -91,8 +93,7 @@ for index, test in enumerate(features):
     predicted_y[index,:] = model.predict(np.expand_dims(test, axis=0))
 
 #%% STEP 6: Data Update 
-df['Segmentation'] = segment_scaler.inverse_transform(np.argmax(predicted_y, 
-                                                                axis=1))
+df['Segmentation'] = ohe_scaler.inverse_transform(predicted_y)
 
 df.to_csv(SAVE_RESULT, index=False)
 
