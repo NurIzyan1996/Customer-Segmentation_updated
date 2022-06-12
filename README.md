@@ -37,4 +37,4 @@ Throughout of doing this process, I have spent hours on cleaning the data only. 
 In conclusion, the performance of the deep learning model that i build is poorly accurate which will cause the prediction of any new data will be unaccurate. In the future, this will cause a company fail to design a marketing strategy to target the most profitable segments.
 
 # Credit
-Big thanks to the owner of our dataset: https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset
+Big thanks to the owner of our dataset: https://www.kaggle.com/datasets/abisheksudarshan/customer-segmentation
